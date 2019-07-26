@@ -1,4 +1,4 @@
-dtt
+dtt [![CircleCI](https://circleci.com/gh/ymizushi/dtt.svg?style=svg)](https://circleci.com/gh/ymizushi/dtt)
 ============
 
 dtt is the text-mode interface for docker command.
