@@ -20,4 +20,4 @@ Exec `dtt` command and move to container with j or k key (like vim) and press En
 
 # Development
 
-see ![README_DEV.md](https://github.com/ymizushi/dtt/blob/master/README_DEV.md)
+see [README_DEV.md](https://github.com/ymizushi/dtt/blob/master/README_DEV.md)
