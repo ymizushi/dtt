@@ -1,0 +1,12 @@
+version: '3'
+services:
+  john-myung:
+    image: nginx:latest
+  john-petrucci:
+    image: nginx:latest
+  james-labrie:
+    image: nginx:latest
+  jordan-rudess:
+    image: nginx:latest
+  mike-mangini:
+    image: nginx:latest
