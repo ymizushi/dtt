@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import docker
 import curses
 import subprocess
-
 from help import help_mode
-
 from curses import wrapper
-client = docker.from_env()
-
-from container import Containers
 from colors import Color
 
-def ex(stdscr):
+from kubernetes import client, config
+
+def docker_mode(stdscr):
+    import docker
+    from dtt.container import Containers
+    client = docker.from_env()
     curses.cbreak()
     stdscr.keypad(True)
     Color.init()
@@ -48,8 +47,68 @@ def ex(stdscr):
     curses.echo()
     curses.endwin()
 
+def kubectl_mode(stdscr):
+    from kubectl.pod import Pods
+    curses.cbreak()
+    stdscr.keypad(True)
+    Color.init()
+    pods = Pods(get_kube_pods('argo'))
+    while True:
+        if len(pods.list) == 0:
+            stdscr.addstr(0, 0, "empty runnning pods.", Color.get("RED_WHITE"))
+        for i, l in enumerate(pods.list):
+            stdscr.addstr(i, 0, "{}".format(l.metadata.name), Color.get("BLUE"))
+        stdscr.move(pods.index, 0);
+        c = stdscr.getch()
+        if c == 10:
+            curses.nocbreak() 
+            stdscr.keypad(False)
+            stdscr.clear()
+            subprocess.call(["clear"])
+            subprocess.call(["kubectl", "exec", "-i", "-t", "--namespace", "argo", pods.current_pod.metadata.name, "/bin/sh"])
+            curses.cbreak() 
+            stdscr.keypad(True) 
+        elif c == ord('j'):
+            pods.add_index()
+        elif c == ord('k'):
+            pods.sub_index()
+        elif c == ord('h'):
+            stdscr.clear()
+            wrapper(help_mode)
+            curses.cbreak()
+        elif c == ord('q'):
+            break
+    curses.nocbreak()
+    stdscr.keypad(False)
+    curses.echo()
+    curses.endwin()
+
+def get_kube_pods(namespace):
+    config.load_kube_config()
+    v1 = client.CoreV1Api()
+    return v1.list_namespaced_pod(namespace, watch=False)
+
+from docopt import docopt
+
+__doc__ = """{f}
+Usage:
+    {f}
+    {f} -k | --kubectl
+    {f} -h | --help
+Options:
+    -k --kubectl             kubectl mode
+    -h --help                Show this screen and exit.
+""".format(f='dtt')
+
+
 def main():
-    wrapper(ex)
+    args = docopt(__doc__)
+    if args['--kubectl']:
+        wrapper(kubectl_mode)
+    elif args['--help']:
+        pass
+    else:
+        wrapper(docker_mode)
 
 if __name__ == '__main__':
     main()
