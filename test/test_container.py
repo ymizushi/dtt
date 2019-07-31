@@ -1,4 +1,4 @@
-from dtt.container import Containers
+from dtt.dock.container import Containers
 
 def test_containers():
     test_containers = Containers(
