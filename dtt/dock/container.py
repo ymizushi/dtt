@@ -19,10 +19,3 @@ class Containers:
     def sub_index(self):
         if 0 <= self._index - 1:
             self._index -= 1
-
-class Container:
-    def __init__(self, name):
-        self._name = name
-    @property
-    def name(self):
-        return self.name
