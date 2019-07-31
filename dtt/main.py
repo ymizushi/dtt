@@ -10,7 +10,7 @@ from kubernetes import client, config
 
 def docker_mode(stdscr):
     import docker
-    from dtt.container import Containers
+    from dock.container import Containers
     client = docker.from_env()
     curses.cbreak()
     stdscr.keypad(True)
