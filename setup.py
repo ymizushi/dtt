@@ -11,6 +11,7 @@ if __name__ == "__main__":
         packages=find_packages(),
         install_requires=[
           'docker',
+          'docopt',
         ],
         entry_points={
             'console_scripts':[

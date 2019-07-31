@@ -11,7 +11,6 @@ class Containers:
     @property
     def list(self):
         return self._containers
-
     def set_index(self, index):
         self._index = index
     def add_index(self):
