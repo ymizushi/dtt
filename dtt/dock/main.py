@@ -5,6 +5,7 @@ from curses import wrapper
 import docker
 from dock.container import Containers
 from help import help_mode
+from curses.textpad import Textbox 
 
 KEY_ENTER = 10
 
@@ -37,6 +38,19 @@ def docker_mode(stdscr):
             containers.add_index()
         elif c in [ord('k'), curses.KEY_UP]:
             containers.sub_index()
+        elif c == ord('X'):
+            win = curses.newwin(1, curses.COLS-1, curses.LINES-1, 0)
+            box = Textbox(win)
+            box.edit()
+            command = box.gather().rstrip()
+
+            curses.nocbreak() 
+            stdscr.keypad(False)
+            stdscr.clear()
+            subprocess.call(["clear"])
+            subprocess.call(get_command(containers.current_container.id, command))
+            curses.cbreak() 
+            stdscr.keypad(True) 
         elif c in [ord('h')]:
             stdscr.clear()
             wrapper(help_mode)
