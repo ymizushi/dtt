@@ -12,3 +12,5 @@ class Client:
     def list_namespaced_pod(self, namespace, watch=False):
         return self._v1.list_namespaced_pod(namespace, watch=False)
 
+    def list_pod_for_all_namespaces(self, watch=False):
+        return self._v1.list_pod_for_all_namespaces(watch=False)

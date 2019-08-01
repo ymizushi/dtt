@@ -6,10 +6,7 @@ from help import help_mode
 from kubectl.client import Client
 
 def get_command(pod_name, namespace, exec_command):
-    if namespace:
-        return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
-    else:
-        return ["kubectl", "exec", "-i", "-t", pod_name, exec_command]
+    return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
 
 def kubectl_mode(stdscr):
     from kubectl.pod import Pods
@@ -17,7 +14,7 @@ def kubectl_mode(stdscr):
     stdscr.keypad(True)
     Color.init()
     # TODO: implements namespace config
-    namespace == None
+    namespace = None
     pods = Pods(get_kube_pods(namespace))
     while True:
         if len(pods.list) == 0:
@@ -32,8 +29,8 @@ def kubectl_mode(stdscr):
             stdscr.clear()
             subprocess.call(["clear"])
             # TODO: impl custome exec command
-            exec_command = "/bin/bash"
-            subprocess.call(get_command(pods.current_pod.metadata.name, namespace, exec_command))
+            exec_command = "/bin/sh"
+            subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, exec_command))
             curses.cbreak() 
             stdscr.keypad(True) 
         elif c == ord('j'):
