@@ -2,6 +2,7 @@ import subprocess
 import curses
 from colors import Color
 from help import help_mode
+from config import Config
 
 from kubectl.client import Client
 
@@ -13,8 +14,10 @@ def kubectl_mode(stdscr):
     curses.cbreak()
     stdscr.keypad(True)
     Color.init()
-    # TODO: implements namespace config
-    namespace = None
+    try:
+        namespace = Config()["default"]["kubectl"]["namespace"]
+    except:
+        namespace = None
     pods = Pods(get_kube_pods(namespace))
     while True:
         if len(pods.list) == 0:

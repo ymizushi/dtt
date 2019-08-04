@@ -17,4 +17,3 @@ class Color:
     @classmethod
     def get(cls, name):
         return curses.color_pair(cls.COLOR_MAP.get(name)[0])
-        
