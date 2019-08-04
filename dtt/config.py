@@ -1,8 +1,6 @@
 from os.path import expanduser
 import toml
 
-DEFAULT_SHELL='/bin/sh'
-
 class Config:
     def __init__(self, path=None):
         if path:
