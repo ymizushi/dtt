@@ -3,8 +3,8 @@ import curses
 from colors import Color
 from help import help_mode
 from config import Config
-
 from kubectl.client import Client
+from keypad import KeyPad
 
 def get_command(pod_name, namespace, exec_command):
     return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
@@ -26,12 +26,11 @@ def kubectl_mode(stdscr):
             stdscr.addstr(i, 0, "{}".format(l.metadata.name), Color.get("BLUE"))
         stdscr.move(pods.index, 0);
         c = stdscr.getch()
-        if c == 10:
+        if c in [curses.KEY_ENTER, KeyPad.ENTER]:
             curses.nocbreak() 
             stdscr.keypad(False)
             stdscr.clear()
             subprocess.call(["clear"])
-            # TODO: impl custome exec command
             exec_command = "/bin/sh"
             subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, exec_command))
             curses.cbreak() 
@@ -44,6 +43,19 @@ def kubectl_mode(stdscr):
             stdscr.clear()
             wrapper(help_mode)
             curses.cbreak()
+        elif c == ord('X'):
+            win = curses.newwin(1, curses.COLS-1, curses.LINES-1, 0)
+            box = Textbox(win)
+            box.edit()
+            command = box.gather().rstrip()
+
+            curses.nocbreak() 
+            stdscr.keypad(False)
+            stdscr.clear()
+            subprocess.call(["clear"])
+            subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, command))
+            curses.cbreak() 
+            stdscr.keypad(True) 
         elif c == ord('q'):
             break
     curses.nocbreak()

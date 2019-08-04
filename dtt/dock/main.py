@@ -6,8 +6,8 @@ import docker
 from dock.container import Containers
 from help import help_mode
 from curses.textpad import Textbox 
+from keypad import KeyPad
 
-KEY_ENTER = 10
 
 def get_command(container_id, exec_command):
     return ["docker", "exec", "-i", "-t", container_id, exec_command]
@@ -26,7 +26,7 @@ def docker_mode(stdscr):
             stdscr.addstr(i, 15, "{}".format(l.name), Color.get("CYAN"))
         stdscr.move(containers.index, 0);
         c = stdscr.getch()
-        if c in [curses.KEY_ENTER, KEY_ENTER]:
+        if c in [curses.KEY_ENTER, KeyPad.ENTER]:
             curses.nocbreak() 
             stdscr.keypad(False)
             stdscr.clear()

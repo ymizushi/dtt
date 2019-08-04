@@ -2,11 +2,8 @@ from os.path import expanduser
 import toml
 
 class Config:
-    def __init__(self, path=None):
-        if path:
-            self._path = path
-        else:
-            self._path = '{}/.config/dtt/config.toml'.format(expanduser("~"))
+    def __init__(self, path):
+        self._path = '{}/.config/dtt/config.toml'.format(expanduser("~"))
         with open(self._path) as f:
             self._toml_string = f.read()
     def __getitem__(self, item):
