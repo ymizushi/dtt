@@ -12,6 +12,7 @@ if __name__ == "__main__":
         install_requires=[
           'docker',
           'docopt',
+          'toml',
         ],
         entry_points={
             'console_scripts':[

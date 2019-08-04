@@ -5,15 +5,18 @@ from curses import wrapper
 from docopt import docopt
 from dock.main import docker_mode
 from kubectl.main import kubectl_mode
+from config import Config
 
 __doc__ = """{f}
 Usage: 
     {f} 
     {f} -k | --kubectl
     {f} -h | --help
+    {f} -c | --config
 Options:
     -k --kubectl             kubectl mode
     -h --help                Show this screen and exit.
+    -c --config              Show config
 """.format(f='dtt')
 
 
@@ -23,6 +26,8 @@ def main():
         wrapper(kubectl_mode)
     elif args['--help']:
         pass
+    elif args['--config']:
+        print(Config().to_s)
     else:
         # TODO: fix curses.error: addstr() returned ERR
         wrapper(docker_mode)
