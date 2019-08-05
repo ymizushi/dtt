@@ -22,14 +22,13 @@ Options:
 
 def main():
     args = docopt(__doc__)
-    if args['--kubectl']:
-        wrapper(kubectl_mode)
-    elif args['--help']:
+    if args['--help']:
         pass
     elif args['--config']:
         print(Config().to_s)
+    elif args['--kubectl']:
+        wrapper(kubectl_mode)
     else:
-        # TODO: fix curses.error: addstr() returned ERR
         wrapper(docker_mode)
 
 if __name__ == '__main__':

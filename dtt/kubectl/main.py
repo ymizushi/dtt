@@ -5,42 +5,44 @@ from help import help_mode
 from config import Config
 from kubectl.client import Client
 from keypad import KeyPad
+from kubectl.pod import Pods
 
 def get_command(pod_name, namespace, exec_command):
     return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
 
 def kubectl_mode(stdscr):
-    from kubectl.pod import Pods
     curses.cbreak()
-    stdscr.keypad(True)
     Color.init()
     try:
         namespace = Config()["default"]["kubectl"]["namespace"]
     except:
         namespace = None
     pods = Pods(get_kube_pods(namespace))
+    pad = curses.newpad(len(pods.list),curses.COLS)
+    pad.keypad(True)
     while True:
         if len(pods.list) == 0:
-            stdscr.addstr(0, 0, "empty runnning pods.", Color.get("RED_WHITE"))
+            pad.addstr(0, 0, "empty runnning pods.", Color.get("RED_WHITE"))
         for i, l in enumerate(pods.list):
-            stdscr.addstr(i, 0, "{}".format(l.metadata.name), Color.get("BLUE"))
-        stdscr.move(pods.index, 0);
-        c = stdscr.getch()
+            pad.addstr(i, 0, "{}".format(l.metadata.name), Color.get("BLUE"))
+        pad.move(pods.index, 0);
+        pad.refresh(pods.index-(curses.LINES-1), 0, 0, 0, curses.LINES-1, curses.COLS-1)
+        c = pad.getch()
         if c in [curses.KEY_ENTER, KeyPad.ENTER]:
             curses.nocbreak() 
-            stdscr.keypad(False)
-            stdscr.clear()
+            pad.keypad(False)
+            pad.clear()
             subprocess.call(["clear"])
             exec_command = "/bin/sh"
             subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, exec_command))
             curses.cbreak() 
-            stdscr.keypad(True) 
-        elif c == ord('j'):
+            pad.keypad(True) 
+        elif c in [ord('j'), curses.KEY_DOWN]:
             pods.add_index()
-        elif c == ord('k'):
+        elif c in [ord('k'), curses.KEY_UP]:
             pods.sub_index()
         elif c == ord('h'):
-            stdscr.clear()
+            pad.clear()
             wrapper(help_mode)
             curses.cbreak()
         elif c == ord('X'):
@@ -50,16 +52,16 @@ def kubectl_mode(stdscr):
             command = box.gather().rstrip()
 
             curses.nocbreak() 
-            stdscr.keypad(False)
-            stdscr.clear()
+            pad.keypad(False)
+            pad.clear()
             subprocess.call(["clear"])
             subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, command))
             curses.cbreak() 
-            stdscr.keypad(True) 
+            pad.keypad(True) 
         elif c == ord('q'):
             break
     curses.nocbreak()
-    stdscr.keypad(False)
+    pad.keypad(False)
     curses.echo()
     curses.endwin()
 
