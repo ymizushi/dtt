@@ -13,7 +13,6 @@ pip install dtt
 # Usage
 
 ```sh
-$ dtt
 Usage: 
     dtt 
     dtt -k | --kubectl
