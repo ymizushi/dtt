@@ -4,7 +4,6 @@
 pytest
 ```
 
-
 # Install local dtt
 
 `pip install dist/dtt-{version}.tar.gz`
