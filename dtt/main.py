@@ -3,7 +3,7 @@
 
 from curses import wrapper
 from docopt import docopt
-from dock.main import docker_mode
+from dock.main import gen_docker_mode
 from kubectl.main import kubectl_mode
 from config import Config
 
@@ -29,7 +29,7 @@ def main():
     elif args['--kubectl']:
         wrapper(kubectl_mode)
     else:
-        wrapper(docker_mode)
+        wrapper(gen_docker_mode())
 
 if __name__ == '__main__':
     main()

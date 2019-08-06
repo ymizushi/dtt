@@ -7,17 +7,16 @@ from kubectl.client import Client
 from keypad import KeyPad
 from kubectl.pod import Pods
 
-def get_command(pod_name, namespace, exec_command):
-    return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
+
+def get_command(pod_name, exec_command, namespace):
+    if namespace:
+        return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
+    else:
+        return ["kubectl", "exec", "-i", "-t",  pod_name, exec_command]
 
 def kubectl_mode(stdscr):
     curses.cbreak()
     Color.init()
-    try:
-        namespace = Config()["default"]["kubectl"]["namespace"]
-    except:
-        namespace = None
-    pods = Pods(get_kube_pods(namespace))
     pad = curses.newpad(len(pods.list),curses.COLS)
     pad.keypad(True)
     while True:
@@ -34,7 +33,7 @@ def kubectl_mode(stdscr):
             pad.clear()
             subprocess.call(["clear"])
             exec_command = "/bin/sh"
-            subprocess.call(get_command(pods.current_pod.metadata.name, pods.current_pod.metadata.namespace, exec_command))
+            subprocess.call(get_command(pods.current_pod.metadata.name, exec_command, pods.current_pod.metadata.namespace))
             curses.cbreak() 
             pad.keypad(True) 
         elif c in [ord('j'), curses.KEY_DOWN]:
@@ -72,3 +71,7 @@ def get_kube_pods(namespace=None):
         return client.list_namespaced_pod(namespace, watch=False)
     else:
         return client.list_pod_for_all_namespaces(watch=False)
+
+def gen_kubectl_mode():
+    pods = Pods(get_kube_pods(namespace))
+    return mode_gen('container', pods, get_command)
