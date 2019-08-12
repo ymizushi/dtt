@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 if __name__ == "__main__":
     setup(
         name='dtt',
-        version='0.1.1',
+        version='0.9.0',
         description='the text-mode interface for docker command',
         author='ymizushi',
         author_email='mizushi@gmail.com',
