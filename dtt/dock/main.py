@@ -1,13 +1,12 @@
 import subprocess
 import curses
-from colors import Color
 from curses import wrapper
-import docker
-from dock.container import Containers
-from help import help_mode
 from curses.textpad import Textbox 
-from keypad import KeyPad
-
+import docker
+from dtt.colors import Color
+from dtt.dock.container import Containers
+from dtt.help import help_mode
+from dtt.keypad import KeyPad
 
 def get_command(container_id, exec_command):
     return ["docker", "exec", "-i", "-t", container_id, exec_command]

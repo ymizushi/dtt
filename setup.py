@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 if __name__ == "__main__":
     setup(
         name='dtt',
-        version='0.9.0',
+        version='0.9.1',
         description='the text-mode interface for docker command',
         author='ymizushi',
         author_email='mizushi@gmail.com',
@@ -12,6 +12,7 @@ if __name__ == "__main__":
         install_requires=[
           'docker',
           'docopt',
+          'kubernetes',
           'toml',
         ],
         entry_points={

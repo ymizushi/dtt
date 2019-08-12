@@ -1,11 +1,11 @@
 import subprocess
 import curses
-from colors import Color
-from help import help_mode
-from config import Config
-from kubectl.client import Client
-from keypad import KeyPad
-from kubectl.pod import Pods
+from dtt.kubectl.client import Client
+from dtt.kubectl.pod import Pods
+from dtt.colors import Color
+from dtt.help import help_mode
+from dtt.config import Config
+from dtt.keypad import KeyPad
 
 def get_command(pod_name, namespace, exec_command):
     return ["kubectl", "exec", "-i", "-t", "--namespace", namespace, pod_name, exec_command]
@@ -24,7 +24,7 @@ def kubectl_mode(stdscr):
         if len(pods.list) == 0:
             pad.addstr(0, 0, "empty runnning pods.", Color.get("RED_WHITE"))
         for i, l in enumerate(pods.list):
-            pad.addstr(i, 0, "{}".format(l.metadata.name), Color.get("BLUE"))
+            pad.addstr(i, 0, "{}".format(l.metadata.name), Color.get("CYAN"))
         pad.move(pods.index, 0);
         pad.refresh(pods.index-(curses.LINES-1), 0, 0, 0, curses.LINES-1, curses.COLS-1)
         c = pad.getch()
