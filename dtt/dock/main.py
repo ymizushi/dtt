@@ -7,12 +7,17 @@ from dock.container import Containers
 from help import help_mode
 from curses.textpad import Textbox 
 from keypad import KeyPad
+import logger
+
+log = logger.logger(__name__)
 
 
 def get_command(container_id, exec_command):
     return ["docker", "exec", "-i", "-t", container_id, exec_command]
 
 def docker_mode(stdscr):
+    lines = curses.LINES
+    cols = curses.COLS
     client = docker.from_env()
     curses.cbreak()
     containers = Containers(client.containers.list())
@@ -20,13 +25,22 @@ def docker_mode(stdscr):
     pad.keypad(True)
     Color.init()
     while True:
+        is_resize = curses.is_term_resized(lines, cols)
+        if is_resize is True:
+            log.error(pad.getmaxyx())
+            y, x = pad.getmaxyx()
+            lines = y+1
+            cols = x+1
+            pad.clear()
+            curses.resizeterm(y, x)
+            pad.refresh(containers.index-(lines-1), 0, 0, 0, lines-1, cols-1)
         if len(containers.list) == 0:
             pad.addstr(0, 0, "empty runnning container.", Color.get("RED_WHITE"))
         for i, l in enumerate(containers.list):
             pad.addstr(i, 0, "{}".format(l.id)[:10], Color.get("BLUE"))
             pad.addstr(i, 15, "{}".format(l.name), Color.get("CYAN"))
         pad.move(containers.index, 0);
-        pad.refresh(containers.index-(curses.LINES-1), 0, 0, 0, curses.LINES-1, curses.COLS-1)
+        pad.refresh(containers.index-(lines-1), 0, 0, 0, lines-1, cols-1)
         c = pad.getch()
         if c in [curses.KEY_ENTER, KeyPad.ENTER]:
             curses.nocbreak() 
