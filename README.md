@@ -7,7 +7,15 @@ the ui of dtt is inspired by vim, ranger and tig.
 # Install
 
 ```sh
+
 pip install dtt
+```
+
+Linux user may install ncurses library header and recompile python binary like this
+```sh
+sudo apt-get install libncurses5-dev
+pyenv uninstall 3.8.2
+pyenv install 3.8.2
 ```
 
 # Usage

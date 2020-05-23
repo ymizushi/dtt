@@ -1,4 +1,4 @@
-from colors import Color
+from .colors import Color
 
 HELP_SENTENCES = """Quick reference for dtt keybindings:
 

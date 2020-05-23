@@ -3,9 +3,9 @@
 
 from curses import wrapper
 from docopt import docopt
-from dock.main import docker_mode
-from kubectl.main import kubectl_mode
-from config import Config
+from .kubectl.main import kubectl_mode
+from .config import Config
+from .dock.main import docker_mode
 
 __doc__ = """{f}
 Usage: 

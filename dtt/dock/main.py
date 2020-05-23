@@ -15,7 +15,8 @@ def docker_mode(stdscr):
     client = docker.from_env()
     curses.cbreak()
     containers = Containers(client.containers.list())
-    pad = curses.newpad(len(containers.list),curses.COLS)
+    line_num = 1 if len(containers.list) == 0 else len(containers.list)
+    pad = curses.newpad(line_num,curses.COLS)
     pad.keypad(True)
     Color.init()
     while True:
