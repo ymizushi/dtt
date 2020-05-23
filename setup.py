@@ -34,29 +34,9 @@ if __name__ == "__main__":
         long_description= """dtt is the text-mode interface for docker and kubectl command.
 the ui of dtt is inspired by vim, ranger and tig.
 
-# Install
-
-```sh
-pip install dtt
-```
-
-# Usage
-
-```sh
-Usage: 
-    dtt 
-    dtt -k | --kubectl
-    dtt -h | --help
-    dtt -c | --config
-Options:
-    -k --kubectl             kubectl mode
-    -h --help                Show this screen and exit.
-    -c --config              Show config
-```
-
 A main usecase for dtt is to login container or pod with shell.
 
-Exec `dtt` command and move to container with j or k key (like vim) and press Enter-key when you want to login the container or pod.
+Exec dtt command and move to container with j or k key (like vim) and press Enter-key when you want to login the container or pod.
 
 You can exec another shell or command with `X` key when you select the container or pod."""
     )
